@@ -3,6 +3,16 @@ from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def sqlalchemy_database_url(url: str) -> str:
+    """Render fournit postgres:// ou postgresql:// ; SQLAlchemy + psycopg3 attend postgresql+psycopg://."""
+    raw = url.strip()
+    if raw.startswith("postgres://"):
+        raw = "postgresql://" + raw[len("postgres://") :]
+    if raw.startswith("postgresql://"):
+        raw = "postgresql+psycopg://" + raw[len("postgresql://") :]
+    return raw
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
@@ -11,6 +21,7 @@ class Settings(BaseSettings):
     secret_key: str = "dev-secret-change-me"
     access_token_minutes: int = 60 * 12
     cors_origins: str = "http://localhost:5173,http://localhost:4173"
+    cors_origin_regex: str = r"https://.*\.onrender\.com"
     seed_on_startup: bool = True
 
     # Intégrations externes (optionnelles)
@@ -26,8 +37,21 @@ class Settings(BaseSettings):
     company_vat_number: str = "FR00000000000"
 
     @property
+    def sqlalchemy_database_url(self) -> str:
+        return sqlalchemy_database_url(self.database_url)
+
+    @property
     def cors_origin_list(self) -> list[str]:
-        return [o.strip() for o in self.cors_origins.split(",") if o.strip()]
+        origins: list[str] = []
+        for raw in self.cors_origins.split(","):
+            origin = raw.strip().rstrip("/")
+            if not origin:
+                continue
+            if origin.startswith("http://") or origin.startswith("https://"):
+                origins.append(origin)
+            else:
+                origins.append(f"https://{origin}")
+        return origins
 
 
 @lru_cache

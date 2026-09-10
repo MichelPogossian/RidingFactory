@@ -1,6 +1,6 @@
 import { useAuth } from "@/lib/auth";
 
-const BASE = import.meta.env.VITE_API_URL ?? "";
+const BASE = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
 export class ApiError extends Error {
   status: number;

@@ -104,6 +104,33 @@ Back-office : `http://localhost:5173/admin` · Site public : `http://localhost:5
   « Quelle école fonctionne le mieux en septembre ? », « Où ai-je le plus de places mercredi ? »…)
   répondues à partir des données réelles, reformulées par un LLM si une clé OpenAI est fournie.
 
+## Déploiement sur Render
+
+Le fichier `render.yaml` décrit un Blueprint : PostgreSQL 16, API FastAPI, front statique.
+
+1. Poussez `main` sur GitHub (déjà le cas si vous avez suivi le push).
+2. Sur [Render](https://dashboard.render.com) : **New → Blueprint** → sélectionnez le dépôt `RidingFactory`.
+3. Appliquez le Blueprint (région **Frankfurt**).
+4. Attendez le premier deploy : le seed démo tourne au boot de l’API (quelques dizaines de secondes).
+
+URLs typiques :
+
+- Front : `https://ridingfactory-web.onrender.com`
+- API / docs : `https://ridingfactory-api.onrender.com/docs`
+
+Comptes démo inchangés : `admin@ridingfactory.fr` / `admin123`.
+
+Si le front appelle encore `localhost` ou si le CORS bloque, dans le dashboard :
+
+- **ridingfactory-web** → `VITE_API_URL` = `https://ridingfactory-api.onrender.com` puis **Manual Deploy → Clear build cache & deploy**
+- **ridingfactory-api** → `CORS_ORIGINS` = `https://ridingfactory-web.onrender.com`
+
+Clés optionnelles (Environment de l’API) : `OPENAI_API_KEY`, `STRIPE_SECRET_KEY`, `WORLDTIDES_API_KEY`.
+
+Le plan **free** de l’API s’endort après inactivité (~1 min au réveil). Pour une école en saison, passez le service `ridingfactory-api` en **starter**. Postgres `basic-256mb` est requis (plus de Postgres gratuit chez Render).
+
+Domaine custom : Dashboard → service front → **Custom domains**, puis ajoutez la même origine dans `CORS_ORIGINS`.
+
 ## Vérification
 
 ```bash

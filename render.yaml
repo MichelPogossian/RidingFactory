@@ -1,0 +1,70 @@
+# Blueprint Render — Riding Factory (API + front + PostgreSQL)
+# Dashboard : New → Blueprint → ce dépôt GitHub.
+# Région Frankfurt (la plus proche de la Vendée). Postgres « basic-256mb » est payant (~7 $/mois).
+# L’API est en plan free (s’endort après inactivité) : passez-la en starter pour de la vraie prod.
+
+databases:
+  - name: ridingfactory-db
+    plan: basic-256mb
+    region: frankfurt
+    postgresMajorVersion: "16"
+    databaseName: ridingfactory
+    user: riding
+
+services:
+  - type: web
+    name: ridingfactory-api
+    runtime: python
+    plan: free
+    region: frankfurt
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.8"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: ridingfactory-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SEED_ON_STARTUP
+        value: "true"
+      - key: CORS_ORIGINS
+        fromService:
+          name: ridingfactory-web
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: COMPANY_NAME
+        value: Riding Factory
+      - key: COMPANY_ADDRESS
+        value: Saint-Hilaire-de-Riez, Vendée
+      # Optionnel — à renseigner dans le dashboard Render si besoin :
+      # OPENAI_API_KEY, STRIPE_SECRET_KEY, WORLDTIDES_API_KEY
+
+  - type: web
+    name: ridingfactory-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: bash scripts/build.sh
+    staticPublishPath: dist
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: "20.18.1"
+      - key: VITE_API_URL
+        fromService:
+          name: ridingfactory-api
+          type: web
+          envVarKey: RENDER_EXTERNAL_URL
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /assets/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
