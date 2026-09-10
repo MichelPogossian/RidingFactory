@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ridingfactory-db
+    environment:
+      POSTGRES_USER: riding
+      POSTGRES_PASSWORD: riding
+      POSTGRES_DB: ridingfactory
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U riding -d ridingfactory"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    container_name: ridingfactory-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://riding:riding@db:5432/ridingfactory
+      SECRET_KEY: change-me-in-production
+      SEED_ON_STARTUP: "true"
+      CORS_ORIGINS: http://localhost:5173,http://localhost:4173
+    ports:
+      - "8000:8000"
+    profiles: ["full"]
+
+  frontend:
+    build: ./frontend
+    container_name: ridingfactory-web
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:80"
+    profiles: ["full"]
+
+volumes:
+  postgres-data:
