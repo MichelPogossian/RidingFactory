@@ -34,14 +34,14 @@ export default function AssistantPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8rem)]">
+    <div className="flex flex-col h-[calc(100dvh-7.5rem)] lg:h-[calc(100dvh-4rem)]">
       <PageHeader title="Assistant IA" subtitle="Aide à la décision en langage naturel. Moteur d'analyse interne, enrichi par un LLM si une clé OpenAI est configurée." actions={<SiteSelect value={siteId} onChange={setSiteId} />} />
       <div className="card flex-1 flex flex-col min-h-0">
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {msgs.map((m, i) => (
             <div key={i} className={clsx("flex gap-3", m.role === "user" && "flex-row-reverse")}>
               <span className={clsx("w-8 h-8 rounded-full grid place-items-center shrink-0", m.role === "user" ? "bg-slate-200 text-slate-700" : "bg-ocean-600 text-white")}>{m.role === "user" ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}</span>
-              <div className={clsx("max-w-[75%] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap leading-relaxed", m.role === "user" ? "bg-ocean-600 text-white" : "bg-slate-50 border border-slate-100")}>
+              <div className={clsx("max-w-[min(85%,28rem)] rounded-2xl px-4 py-3 text-sm whitespace-pre-wrap leading-relaxed", m.role === "user" ? "bg-ocean-600 text-white" : "bg-slate-50 border border-slate-100")}>
                 {m.text.split(/(\*\*[^*]+\*\*)/g).map((part, j) => (part.startsWith("**") ? <strong key={j}>{part.slice(2, -2)}</strong> : part))}
                 {m.intent && (
                   <p className="text-[10px] uppercase tracking-wide text-slate-400 mt-2">

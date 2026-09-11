@@ -9,7 +9,7 @@ export function useSites() {
 export function SiteSelect({ value, onChange, allLabel = "Toutes les écoles", className }: { value: number | null; onChange: (v: number | null) => void; allLabel?: string; className?: string }) {
   const sites = useSites();
   return (
-    <select className={className ?? "input !w-auto"} value={value ?? ""} onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}>
+    <select className={className ?? "input w-full sm:w-auto"} value={value ?? ""} onChange={(e) => onChange(e.target.value ? Number(e.target.value) : null)}>
       <option value="">{allLabel}</option>
       {sites.data?.map((s) => (
         <option key={s.id} value={s.id}>

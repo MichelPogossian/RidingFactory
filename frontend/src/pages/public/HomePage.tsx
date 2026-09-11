@@ -17,17 +17,17 @@ export default function HomePage() {
           <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-ocean-300 mb-5">
             <Waves className="w-4 h-4" /> Saint-Hilaire-de-Riez · Vendée
           </p>
-          <h1 className="text-4xl sm:text-6xl font-semibold text-white leading-[1.05] max-w-3xl">
+          <h1 className="text-3xl sm:text-6xl font-semibold text-white leading-[1.1] max-w-3xl">
             Réservez votre session en trois clics, on s'occupe des vagues.
           </h1>
           <p className="mt-6 text-lg text-ocean-100 max-w-2xl">
             Dites-nous votre niveau : nous croisons marées, houle, vent et places disponibles pour vous proposer le meilleur spot et le meilleur créneau, à La Pège ou aux Demoiselles.
           </p>
-          <div className="mt-10 flex flex-wrap gap-3">
-            <Link to="/reserver" className="btn bg-white text-ocean-900 hover:bg-ocean-50 !px-6 !py-3 text-base">
+          <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3">
+            <Link to="/reserver" className="btn bg-white text-ocean-900 hover:bg-ocean-50 !px-6 !py-3 text-base w-full sm:w-auto justify-center">
               Réserver une séance <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link to="/bon-cadeau" className="btn bg-white/10 text-white hover:bg-white/15 !px-6 !py-3 text-base">
+            <Link to="/bon-cadeau" className="btn bg-white/10 text-white hover:bg-white/15 !px-6 !py-3 text-base w-full sm:w-auto justify-center">
               <Gift className="w-4 h-4" /> Offrir un bon cadeau
             </Link>
           </div>

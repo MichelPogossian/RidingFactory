@@ -74,11 +74,11 @@ export default function DashboardPage() {
           <ul className="space-y-3">
             {d.top_slots.map((s) => (
               <li key={`${s.site}-${s.activity}-${s.hour}`} className="text-sm">
-                <div className="flex justify-between">
-                  <span className="font-medium">
+                <div className="flex justify-between gap-3 items-start">
+                  <span className="font-medium min-w-0 break-words">
                     {s.hour} · {s.site} · {s.activity}
                   </span>
-                  <span className="font-semibold">{eur(s.revenue_cents)}</span>
+                  <span className="font-semibold shrink-0">{eur(s.revenue_cents)}</span>
                 </div>
                 <p className="text-xs text-slate-500">
                   {s.participants} participants sur {s.sessions} séances
@@ -104,11 +104,12 @@ export default function DashboardPage() {
             <ul className="space-y-3">
               {d.upcoming_low_fill.slice(0, 8).map((s) => (
                 <li key={s.session_id} className="text-sm">
-                  <div className="flex justify-between items-center">
-                    <span className="flex items-center gap-2">
-                      <AlertTriangle className="w-4 h-4 text-amber-500" /> {fmtDateTime(s.start_at)} · {s.site} · {s.activity}
+                  <div className="flex justify-between items-start gap-3">
+                    <span className="flex items-start gap-2 min-w-0">
+                      <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                      <span className="break-words">{fmtDateTime(s.start_at)} · {s.site} · {s.activity}</span>
                     </span>
-                    <span className="text-slate-500">
+                    <span className="text-slate-500 shrink-0">
                       {s.booked}/{s.capacity}
                     </span>
                   </div>
@@ -119,6 +120,7 @@ export default function DashboardPage() {
           )}
         </Card>
         <Card title="Produits boutique les plus vendus (saison)">
+          <div className="overflow-x-auto -mx-1">
           <table className="table">
             <thead>
               <tr>
@@ -137,6 +139,7 @@ export default function DashboardPage() {
               ))}
             </tbody>
           </table>
+          </div>
         </Card>
       </div>
     </div>

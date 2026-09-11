@@ -60,8 +60,8 @@ export default function PlanningPage() {
         }
       />
 
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div className="flex flex-wrap items-center gap-2">
           <button className="btn-secondary !px-2.5" onClick={() => setWeekStart(addDays(weekStart, -7))}>
             <ChevronLeft className="w-4 h-4" />
           </button>
@@ -71,11 +71,11 @@ export default function PlanningPage() {
           <button className="btn-secondary !px-2.5" onClick={() => setWeekStart(addDays(weekStart, 7))}>
             <ChevronRight className="w-4 h-4" />
           </button>
-          <span className="ml-2 font-display font-semibold text-lg">
+          <span className="ml-0 sm:ml-2 font-display font-semibold text-base sm:text-lg">
             Semaine du {format(weekStart, "d MMMM", { locale: fr })} au {format(addDays(weekStart, 6), "d MMMM yyyy", { locale: fr })}
           </span>
         </div>
-        <div className="text-sm text-slate-600 flex gap-4">
+        <div className="text-sm text-slate-600 flex flex-wrap gap-x-4 gap-y-1">
           <span>
             <strong>{totals.sessions}</strong> créneaux
           </span>

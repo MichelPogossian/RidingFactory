@@ -73,7 +73,7 @@ export default function AnalyticsPage() {
         <Loading />
       ) : (
         <>
-          <div className="grid sm:grid-cols-4 gap-4 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
             <Stat label="CA période" value={eur(rev.data.total_cents)} />
             <Stat label="Meilleure école" value={rev.data.by_site.find((r) => r.id)?.label ?? "—"} hint={rev.data.by_site[0] && eur(rev.data.by_site[0].total_cents)} />
             <Stat label="Meilleure activité" value={rev.data.by_activity.find((r) => r.id)?.label ?? "—"} hint={rev.data.by_activity[0] && eur(rev.data.by_activity[0].total_cents)} />

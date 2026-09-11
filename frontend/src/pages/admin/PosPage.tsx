@@ -102,6 +102,7 @@ export default function PosPage() {
           )}
 
           <Card className="mt-6" title="Ventes du jour">
+            <div className="overflow-x-auto">
             <table className="table">
               <thead>
                 <tr>
@@ -131,10 +132,11 @@ export default function PosPage() {
                 )}
               </tbody>
             </table>
+            </div>
           </Card>
         </div>
 
-        <aside className="card p-5 h-fit sticky top-6">
+        <aside className="card p-5 h-fit lg:sticky lg:top-6">
           <h3 className="font-semibold flex items-center gap-2 mb-4">
             <ShoppingCart className="w-4 h-4" /> Ticket
           </h3>
